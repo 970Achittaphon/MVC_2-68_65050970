@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>รายชื่อนักการเมืองทั้งหมด</h2>
+        <span class="badge bg-primary">จำนวน {{ politicians|length }} ท่าน</span>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for pol in politicians %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">{{ pol.name }}</h5>
+                    <p class="card-text">
+                        <strong>สังกัด:</strong> {{ pol.party }}<br>
+                        <strong>รหัสประจำตัว:</strong> {{ pol.id }}
+                    </p>
+                </div>
+                <div class="card-footer bg-transparent border-top-0">
+                    <a href="{{ url_for('politician_controller.politician_profile', pol_id=pol.id) }}" 
+                       class="btn btn-outline-primary w-100">
+                        ดูคำสัญญาและผลงาน
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center">
+            <p class="text-muted">ไม่พบข้อมูลนักการเมืองในระบบ</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

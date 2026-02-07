@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="bg-white p-4 rounded shadow-sm border">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>นักการเมือง: {{ politician.name }}</h2>
+            <p class="lead text-muted">สังกัดพรรค: {{ politician.party }}</p>
+            <p><strong>รหัสประจำตัว:</strong> {{ politician.id }}</p>
+        </div>
+    </div>
+    <hr>
+    <h4>คำสัญญาที่เคยประกาศไว้:</h4>
+    <div class="list-group mt-3">
+        {% for promise in promises %}
+        <a href="{{ url_for('promise_controller.promise_detail', promise_id=promise.id) }}" class="list-group-item list-group-item-action">
+            {{ promise.description }}
+            <span class="badge float-end {% if promise.status == 'เงียบหาย' %}bg-danger{% else %}bg-secondary{% endif %}">{{ promise.status }}</span>
+        </a>
+        {% else %}
+        <p class="text-muted">ยังไม่มีข้อมูลคำสัญญา</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

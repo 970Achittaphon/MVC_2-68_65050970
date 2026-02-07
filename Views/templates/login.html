@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white text-center">
+                <h4>เข้าสู่ระบบ</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">ชื่อผู้ใช้งาน (Username)</label>
+                        <input type="text" name="username" class="form-control" placeholder="admin หรือ user" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">รหัสผ่าน (Password)</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">เข้าสู่ระบบ</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-muted small">
+                <p class="mb-0">* จำลองสิทธิ์แยกผู้ใช้งานทั่วไปกับผู้ดูแลระบบ</p>
+            </div>
+        </div>
+        
+        <div class="mt-4 p-3 border rounded bg-white">
+            <p class="mb-1"><strong>สำหรับการทดสอบ:</strong></p>
+            <ul class="mb-0">
+                <li>Admin: <code>admin / 123</code> (อัปเดตสัญญาได้)</li>
+                <li>User: <code>user / 123</code> (ดูได้อย่างเดียว)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

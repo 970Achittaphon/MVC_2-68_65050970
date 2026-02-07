@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="card shadow-sm mt-4">
+    <div class="card-body">
+        <h3>รายละเอียดคำสัญญา</h3>
+        <p class="lead">{{ promise.description }}</p>
+        <hr>
+        <p><strong>ผู้ให้สัญญา:</strong> <a href="{{ url_for('politician_controller.politician_profile', pol_id=promise.politician_id) }}">{{ promise.politician.name }}</a></p>
+        <p>
+            <strong>สถานะปัจจุบัน:</strong>
+            {% if promise.status == 'ยังไม่เริ่ม' %}
+                <span class="badge bg-secondary">ยังไม่เริ่ม</span> 
+            {% elif promise.status == 'เงียบหาย' %}
+                <span class="badge bg-danger">เงียบหาย</span> 
+            {% elif promise.status == 'กำลังดำเนินการ' %}
+                <span class="badge bg-warning text-dark">กำลังดำเนินการ</span> 
+            {% else %}
+                <span class="badge bg-info">{{ promise.status }}</span>
+            {% endif %}
+        </p>
+
+        <h5 class="mt-4">📋 ประวัติความคืบหน้า</h5>
+        <ul class="list-group mb-4">
+            {% for update in promise.updates|sort(attribute='update_date', reverse=True) %}
+            <li class="list-group-item">
+                <small class="text-muted">{{ update.update_date.strftime('%d/%m/%Y %H:%M') }}</small>
+                <p class="mb-0">{{ update.detail }}</p>
+            </li>
+            {% else %}
+            <li class="list-group-item text-muted">ยังไม่มีการอัปเดตความคืบหน้า</li>
+            {% endfor %}
+        </ul>
+
+        {# ส่วนจัดการสำหรับ ADMIN #}
+        {% if session.get('role') == 'ADMIN' %}
+            {% if promise.status != 'เงียบหาย' %}
+                {# ถ้าไม่ใช้ 'เงียบหาย' ให้กดปุ่มไปหน้า Update เพื่อเปลี่ยนสถานะได้ #}
+                <a href="{{ url_for('promise_controller.update_promise', promise_id=promise.id) }}" class="btn btn-warning">เพิ่มความคืบหน้า / เปลี่ยนสถานะ</a>
+            {% else %}
+                <div class="alert alert-dark d-inline-block p-2">
+                    <button class="btn btn-secondary" disabled>ไม่สามารถอัปเดตได้ (สถานะเงียบหาย)</button>
+                </div>
+            {% endif %}
+        {% endif %}
+        
+        <div class="mt-3">
+            <a href="{{ url_for('promise_controller.all_promises') }}" class="btn btn-outline-primary">กลับหน้ารวม</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

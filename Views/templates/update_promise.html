@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">อัปเดตความคืบหน้าและสถานะคำสัญญา</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info border-0 shadow-sm">
+                    <h5><strong>คำสัญญา:</strong></h5>
+                    <p class="mb-0">{{ promise.description }}</p>
+                    <hr>
+                    <small>
+                        <strong>นักการเมือง:</strong> {{ promise.politician.name }} | 
+                        <strong>สถานะปัจจุบัน:</strong> 
+                        {% if promise.status == 'ยังไม่เริ่ม' %}
+                            <span class="badge bg-secondary">ยังไม่เริ่ม</span>
+                        {% elif promise.status == 'เงียบหาย' %}
+                            <span class="badge bg-danger">เงียบหาย</span>
+                        {% elif promise.status == 'กำลังดำเนินการ' %}
+                            <span class="badge bg-warning text-dark">กำลังดำเนินการ</span>
+                        {% else %}
+                            <span class="badge bg-info">{{ promise.status }}</span>
+                        {% endif %}
+                    </small>
+                </div>
+
+                {# ปรับ URL Action ให้ตรงกับ Controller ที่ใช้รับข้อมูล #}
+                <form action="{{ url_for('promise_controller.update_promise', promise_id=promise.id) }}" method="POST">
+                    
+                    {# 1. ส่วนเลือกสถานะใหม่ #}
+                    <div class="mb-4">
+                        <label for="new_status" class="form-label"><strong>เปลี่ยนสถานะเป็น (New Status):</strong></label>
+                        <select class="form-select border-primary" id="new_status" name="new_status">
+                            <option value="ยังไม่เริ่ม" {% if promise.status == 'ยังไม่เริ่ม' %}selected{% endif %}>ยังไม่เริ่ม</option>
+                            <option value="กำลังดำเนินการ" {% if promise.status == 'กำลังดำเนินการ' %}selected{% endif %}>กำลังดำเนินการ</option>
+                            <option value="เงียบหาย" {% if promise.status == 'เงียบหาย' %}selected{% endif %}>เงียบหาย</option>
+                        </select>
+                        <div class="form-text text-muted">* การเปลี่ยนสถานะจะมีผลต่อสี Badge ในหน้าแสดงผลทั้งหมด</div>
+                    </div>
+
+                    {# 2. ส่วนกรอกรายละเอียด #}
+                    <div class="mb-4">
+                        <label for="detail" class="form-label"><strong>รายละเอียดความคืบหน้า (Progress Detail):</strong></label>
+                        <textarea class="form-control" id="detail" name="detail" rows="5" placeholder="อธิบายความคืบหน้าที่เกิดขึ้น เช่น เริ่มดำเนินการจัดซื้อจัดจ้างแล้ว..." required></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between border-top pt-3">
+                        <a href="{{ url_for('promise_controller.promise_detail', promise_id=promise.id) }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> ยกเลิก
+                        </a>
+                        <button type="submit" class="btn btn-success px-5 shadow-sm">
+                            <i class="bi bi-save"></i> บันทึกการอัปเดต
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center text-muted small">
+                ระบบจะบันทึกประวัติการอัปเดตนี้ลงในฐานข้อมูล และพาท่านกลับไปยังหน้ารายละเอียด
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

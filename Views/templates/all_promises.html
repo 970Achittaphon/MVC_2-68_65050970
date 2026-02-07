@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>📌 รายการคำสัญญาทั้งหมด</h2>
+    {% if session.get('role') == 'ADMIN' %}
+        <span class="badge bg-dark">โหมดผู้ดูแลระบบ: จัดการข้อมูลได้</span>
+    {% endif %}
+</div>
+
+<div class="list-group">
+    {% for promise in promises %}
+    <a href="{{ url_for('promise_controller.promise_detail', promise_id=promise.id) }}" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ promise.description[:100] }}...</h5>
+            <span class="badge {% if promise.status == 'เงียบหาย' %}bg-danger{% elif promise.status == 'กำลังดำเนินการ' %}bg-warning{% else %}bg-secondary{% endif %}">
+                {{ promise.status }}
+            </span>
+        </div>
+        <p class="mb-1 text-primary">{{ promise.politician.name }} - {{ promise.politician.party }}</p>
+        <small class="text-muted">ประกาศเมื่อ: {{ promise.announced_date.strftime('%Y-%m-%d') }}</small>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}
